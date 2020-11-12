@@ -13,12 +13,14 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
+//mongodb+srv://Alex:<password>@workouttracker.d9ohy.mongodb.net/<dbname>?retryWrites=true&w=majority
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {
+mongoose.connect(process.env.MONGODB_URI || "mongodb+srv://Alex:12345@workouttracker.d9ohy.mongodb.net/WorkoutTracker?retryWrites=true&w=majority", {
   useNewUrlParser: true,
   useFindAndModify: false
 });
 
+let WorkoutModel = require("./models/workout");
 // ROUTES TO DISPLAY HTML PAGES
 
 app.get("/", (req,res) => {
@@ -32,6 +34,54 @@ app.get("/", (req,res) => {
   app.get("/stats", (req,res) => {
     res.sendFile(path.join(__dirname, 'public', 'stats.html'));
   });
+
+
+  app.get("/api/workouts", (req,res) => {
+    console.log("we hit the route!");
+    WorkoutModel.find({}).then(function(data) {
+      console.log('did we find anyhting ??', data)
+      res.json(data)
+    })
+  });
+
+
+  app.get("/api/workouts/range", (req,res) => {
+    console.log("we hit the stats route!");
+    WorkoutModel.find({}).limit(7).then(function(data) {
+      console.log('did we find any stats ??', data)
+      res.json(data)
+    })
+  });
+
+
+
+
+  app.post("/api/workouts", (req,res) => {
+    console.log("we hit the create route!");
+    WorkoutModel.create({exercises:[]}).then(function(data) {
+      console.log('did we create anything ??', data)
+      res.json(data)
+    })
+  });
+
+  app.put("/api/workouts/:id", (req,res) => {
+    console.log("we hit the create route!", req.body);
+    console.log('our params!!!', req.params)
+    
+
+    WorkoutModel.findOneAndUpdate(
+      { _id: req.params.id }, 
+      { $push: {
+          exercises: req.body
+      }}
+      ).then(function(data) {
+      console.log('did we create anything ??', data)
+      res.json(data)
+    })
+
+  });
+
+
 
   app.listen(PORT, () => {
     console.log(`App running on port ${PORT}!`);
