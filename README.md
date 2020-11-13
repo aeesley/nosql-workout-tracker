@@ -33,10 +33,10 @@ Add new exercises to complete a workout, or continue a previous workout. Get all
 ![Homepage](./fitness-tracker-homepage.png)
 ![Stats](./nosql-workout-tracker-stats.png)
 
-# Technology
+## Technology
 Mongo, Mongoose, Github, Node, JQuery, Express, Atlas, Heroku, HTML, CSS etc.
 
-# Sources
+## Sources
 Worked through this project using past class activities and help from a tutor session.
 
 ## Additional Questions
