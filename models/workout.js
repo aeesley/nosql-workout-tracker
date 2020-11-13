@@ -1,6 +1,7 @@
 // Requiring Mongoose
 const mongoose = require("mongoose");
 
+// CREATING SCHEMA TO USE THROUGHOUT APP
 const Schema = mongoose.Schema;
 
 const workoutSchema = new Schema({
@@ -45,13 +46,14 @@ const workoutSchema = new Schema({
         virtuals: true
     }
 });
-
+// CREATING THE VIRTUAL TO GET THE TOTAL DURATION OF THE WORKOUT
 workoutSchema.virtual("totalDuration").get(function(){
     return this.exercises.reduce((sum, exercise) => {
         return sum + exercise.duration
     },0)
 });
 
+// EXPORTING WORKOUT
 const Workout = mongoose.model("Workout", workoutSchema);
 
 module.exports = Workout;
